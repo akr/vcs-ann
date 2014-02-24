@@ -14,4 +14,5 @@ interactive wrapper for "svn ann" and "git blame"
 
 ## Author
 
-Tanaka Akira <akr@fsij.org>
+Tanaka Akira
+akr@fsij.org
