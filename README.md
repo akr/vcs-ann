@@ -5,7 +5,7 @@ interactive wrapper for "svn ann" and "git blame"
 
 ## Usage:
 
-    vcs-ann svn-or-git-manged-file
+    vcs-ann svn-or-git-managed-file
 
 ## Requirement
 
