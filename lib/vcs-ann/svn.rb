@@ -43,10 +43,11 @@ class SVNRepo
       cat = Tempfile.new([tmpbase, ".txt"])
       cat.close
       out, err, status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "cat", "-r#{rev}", "#{@root}#{relpath}")
+      out.force_encoding('locale').scrub!
+      err.force_encoding('locale').scrub!
       if !status.success?
         raise "svn cat failed"
       end
-      out.force_encoding('locale').scrub!
       cat.open
       cat << out
       cat.close
@@ -145,7 +146,9 @@ class SVNRepo
     log_out, log_err, log_status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "log", "-r#{rev}", "#{@root}")
     diff_out, diff_err, diff_status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "diff", "-c#{rev}", "#{@root}")
     log_out.force_encoding('locale').scrub!
+    log_err.force_encoding('locale').scrub!
     diff_out.force_encoding('locale').scrub!
+    diff_err.force_encoding('locale').scrub!
 
     rev_hash = {}
     diff_out.each_line {|line|

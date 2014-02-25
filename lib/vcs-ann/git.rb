@@ -5,6 +5,7 @@ class GITRepo
 
   def git_blame_each(topdir, relpath, rev)
     out, status = Open3.capture2('git', '-C', topdir, 'blame', '--porcelain', rev, '--', relpath)
+    out.force_encoding('locale').scrub!
     if !status.success?
       raise "git blame failed"
     end
@@ -75,6 +76,7 @@ class GITRepo
     rev
     log_out, log_status = Open3.capture2({'LC_ALL'=>'C'},
        'git', '-C', @topdir.to_s, 'log', '-1', '--parents', rev)
+    log_out.force_encoding('locale').scrub!
     if !log_status.success?
       raise "git log failed."
     end
@@ -94,6 +96,7 @@ class GITRepo
     parent_revs.each {|parent_rev|
       diff_out, diff_status = Open3.capture2({'LC_ALL'=>'C'},
          'git', '-C', @topdir.to_s, 'diff', parent_rev, commit_rev)
+      diff_out.force_encoding('locale').scrub!
       if !diff_status.success?
         raise "git diff failed."
       end
