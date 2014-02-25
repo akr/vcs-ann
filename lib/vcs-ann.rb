@@ -36,7 +36,7 @@ def scan_udiff(string)
   ln_num1 = 0
   ln_num2 = 0
   string.each_line {|line|
-    line.force_encoding('UTF-8').scrub!
+    line.force_encoding('locale').scrub!
     case line
     when /\A---\s+(\S+)/
       yield :filename1, line, $1

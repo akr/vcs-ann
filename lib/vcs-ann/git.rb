@@ -13,7 +13,7 @@ class GITRepo
     prev_header = {}
     block = []
     out.each_line {|line|
-      line.force_encoding('UTF-8').scrub!
+      line.force_encoding('locale').scrub!
       if /\A\t/ !~ line
         block << line
       else

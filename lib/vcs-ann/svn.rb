@@ -10,8 +10,8 @@ class SVNRepo
     key = [relpath, rev]
     if !@type.has_key?(key)
       out, err, status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "info", "-r#{rev}", "#{@root}#{relpath}")
-      out.force_encoding('UTF-8').scrub!
-      err.force_encoding('UTF-8').scrub!
+      out.force_encoding('locale').scrub!
+      err.force_encoding('locale').scrub!
       if !status.success?
         case err
         when /Unable to find repository location/
@@ -46,7 +46,7 @@ class SVNRepo
       if !status.success?
         raise "svn cat failed"
       end
-      out.force_encoding('UTF-8').scrub!
+      out.force_encoding('locale').scrub!
       cat.open
       cat << out
       cat.close
@@ -144,8 +144,8 @@ class SVNRepo
     rev = list[0]
     log_out, log_err, log_status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "log", "-r#{rev}", "#{@root}")
     diff_out, diff_err, diff_status = Open3.capture3({"LC_ALL"=>"C"}, "svn", "diff", "-c#{rev}", "#{@root}")
-    log_out.force_encoding('UTF-8').scrub!
-    diff_out.force_encoding('UTF-8').scrub!
+    log_out.force_encoding('locale').scrub!
+    diff_out.force_encoding('locale').scrub!
 
     rev_hash = {}
     diff_out.each_line {|line|
