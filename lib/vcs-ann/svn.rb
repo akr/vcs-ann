@@ -177,15 +177,15 @@ class SVNRepo
       case tag
       when :filename1
         line, filename1 = rest
-        result << "#{rev_space} #{rev_space} "
+        result << " "
         result << (h line.chomp) << "\n"
       when :filename2
         line, filename2 = rest
-        result << "#{rev_space} #{rev_space} "
+        result << " "
         result << (h line.chomp) << "\n"
       when :hunk_header
         line, ln_cur1, ln_num1, ln_cur2, ln_num2 = rest
-        result << "#{rev_space} #{rev_space} "
+        result << " "
         result << (h line.chomp) << "\n"
       when :del
         line, content_line, ln_cur1 = rest
@@ -193,18 +193,16 @@ class SVNRepo
         rev1_url = "/file/#{rev1}/#{filename1}\##{ln_cur1}"
         result << %{<a name="#{h(u(rev1.to_s+"/"+filename1+":"+ln_cur1.to_s))}"></a>}
         result << %{<a name="#{h(u(rev1.to_s+":"+content_line.chomp))}"></a>}
-        result << %{<a href="#{h rev1_url}">#{h rev_fmt % rev1}</a> }
-        result << "#{rev_space} "
-        result << (h "-#{content_line}") << "\n"
+        result << %{<a href="#{h rev1_url}"> -</a>}
+        result << (h content_line) << "\n"
       when :add
         line, content_line, ln_cur2 = rest
         content_line = content_line.chomp.expand_tab
         rev2_url = "/file/#{rev2}/#{filename2}\##{ln_cur2}"
         result << %{<a name="#{h(u(rev2.to_s+"/"+filename2+":"+ln_cur2.to_s))}"></a>}
         result << %{<a name="#{h(u(rev2.to_s+":"+content_line.chomp))}"></a>}
-        result << "#{rev_space} "
-        result << %{<a href="#{h rev2_url}">#{h rev_fmt % rev2}</a> }
-        result << (h "+#{content_line}") << "\n"
+        result << %{<a href="#{h rev2_url}"> +</a>}
+        result << (h content_line) << "\n"
       when :com
         line, content_line, ln_cur1, ln_cur2 = rest
         content_line = content_line.chomp.expand_tab
@@ -214,12 +212,12 @@ class SVNRepo
         result << %{<a name="#{h(u(rev2.to_s+"/"+filename2+":"+ln_cur2.to_s))}"></a>}
         result << %{<a name="#{h(u(rev1.to_s+":"+content_line.chomp))}"></a>}
         result << %{<a name="#{h(u(rev2.to_s+":"+content_line.chomp))}"></a>}
-        result << %{<a href="#{h rev1_url}">#{h rev_fmt % rev1}</a> }
-        result << %{<a href="#{h rev2_url}">#{h rev_fmt % rev2}</a> }
-        result << (h " #{content_line}") << "\n"
+        result << %{<a href="#{h rev1_url}"> </a>}
+        result << %{<a href="#{h rev2_url}"> </a>}
+        result << (h content_line) << "\n"
       when :other
         line, = rest
-        result << "#{rev_space} #{rev_space} "
+        result << " "
         result << (h line.chomp) << "\n"
       else
         raise "unexpected udiff line tag"
