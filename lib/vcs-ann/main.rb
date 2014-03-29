@@ -156,7 +156,7 @@ end
 
 def find_git_repository(realpath, d)
   relpath = realpath.relative_path_from(d).to_s
-  rev, status = Open3.capture2('git', '-C', d.to_s, 'log', '--pretty=format:%H', '-1', relpath.to_s)
+  rev, status = Open3.capture2('git', "--git-dir=#{d.to_s}/.git", "--work-tree=#{d.to_s}", 'log', '--pretty=format:%H', '-1', "--", relpath.to_s)
   if !status.success?
     raise "git log failed"
   end
@@ -183,7 +183,10 @@ def setup_repository(filename)
 end
 
 def run_browser(url)
-  system "w3m", url
+  ret = system "w3m", url
+  if ret != true
+    raise "w3m not found"
+  end
 end
 
 def main(argv)
