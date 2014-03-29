@@ -183,7 +183,10 @@ def setup_repository(filename)
 end
 
 def run_browser(url)
-  system "w3m", url
+  ret = system "w3m", url
+  if ret != true
+    raise "w3m not found"
+  end
 end
 
 def main(argv)
