@@ -194,5 +194,5 @@ def main(argv)
   repo, relpath, rev = setup_repository filename
   server = Server.new(repo)
   run_browser server.annotate_url(relpath, rev)
-  server.stop
+  exit(true)
 end
