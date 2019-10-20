@@ -5,7 +5,7 @@ vcs-ann is an interactive wrapper for "annotate/blame/praise" and "diff" of svn 
 
 ## Usage
 
-    vcs-ann svn-or-git-managed-file
+    vcs-ann [commit] svn-or-git-managed-file
 
 ## Requirement
 

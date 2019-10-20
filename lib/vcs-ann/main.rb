@@ -156,9 +156,13 @@ def find_svn_repository(arg)
   return SVNRepo.new(root), relpath, rev
 end
 
-def find_git_repository(realpath, d)
-  relpath = realpath.relative_path_from(d).to_s
-  rev, status = Open3.capture2('git', "--git-dir=#{d.to_s}/.git", "--work-tree=#{d.to_s}", 'log', '--pretty=format:%H', '-1', "--", relpath.to_s)
+def find_git_repository(relpath, d, rev)
+  relpath = relpath.to_s
+  if rev
+    rev, status = Open3.capture2('git', "--git-dir=#{d.to_s}/.git", "--work-tree=#{d.to_s}", 'log', '--pretty=format:%H', '-1', rev, "--", relpath)
+  else
+    rev, status = Open3.capture2('git', "--git-dir=#{d.to_s}/.git", "--work-tree=#{d.to_s}", 'log', '--pretty=format:%H', '-1', "--", relpath)
+  end
   if !status.success?
     raise "git log failed"
   end
@@ -167,18 +171,25 @@ end
 
 def parse_arguments(argv)
   # process options
-  filename = argv[0]
-  filename
+  if argv.length == 1
+    rev = nil
+    filename = argv[0]
+  else
+    rev = argv[0]
+    filename = argv[1]
+  end
+  [filename, rev]
 end
 
-def setup_repository(filename)
-  realpath = Pathname(filename).realpath
-  realpath.dirname.ascend {|d|
+def setup_repository(filename, rev)
+  f = Pathname(filename)
+  [*f.ascend.to_a, Pathname('.')].each {|d|
     if (d+".svn").exist?
       return find_svn_repository(filename)
     end
     if (d+".git").exist?
-      return find_git_repository(realpath, d)
+      relpath = f.relative_path_from(d)
+      return find_git_repository(relpath, d, rev)
     end
   }
   raise "cannot find a repository"
@@ -192,8 +203,8 @@ def run_browser(url)
 end
 
 def main(argv)
-  filename = parse_arguments(argv)
-  repo, relpath, rev = setup_repository filename
+  filename, rev = parse_arguments(argv)
+  repo, relpath, rev = setup_repository filename, rev
   server = Server.new(repo)
   run_browser server.annotate_url(relpath, rev)
   exit(true)
