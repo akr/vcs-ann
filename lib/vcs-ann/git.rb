@@ -4,10 +4,11 @@ class GITRepo
   end
 
   def git_blame_each(topdir, relpath, rev)
-    out, status = Open3.capture2('git', "--git-dir=#{topdir}/.git", "--work-tree=#{topdir}", 'blame', '--porcelain', rev, '--', relpath)
+    command = ['git', "--git-dir=#{topdir}/.git", "--work-tree=#{topdir}", 'blame', '--porcelain', rev, '--', relpath]
+    out, status = Open3.capture2(*command)
     out.force_encoding('locale').scrub!
     if !status.success?
-      raise "git blame failed"
+      raise "git blame failed: #{command.join(" ")}"
     end
 
     header_hash = {}

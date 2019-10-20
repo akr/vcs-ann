@@ -1,9 +1,9 @@
 vcs-ann
 =======
 
-vcs-ann is an interactive wrapper for "annotate" and "diff" of svn and git.
+vcs-ann is an interactive wrapper for "annotate/blame/praise" and "diff" of svn and git.
 
-## Usage:
+## Usage
 
     vcs-ann svn-or-git-managed-file
 
