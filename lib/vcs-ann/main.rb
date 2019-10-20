@@ -114,8 +114,10 @@ class Server
     case list[0]
     when 'file'
       res.body = repo.format_file list[1..-1]
-    when 'commit'
+    when 'commit', 'diff-parents'
       res.body = repo.format_commit list[1..-1]
+    when 'diff-children'
+      res.body = repo.format_diff_children list[1..-1]
     else
       raise "unexpected command"
     end
