@@ -107,7 +107,7 @@ class GITRepo
   def format_commit(list)
     target_rev = list[0]
     log_out, log_status = Open3.capture2({'LC_ALL'=>'C'},
-	'git', "--git-dir=#{@topdir.to_s}/.git", "--work-tree=#{@topdir.to_s}", 'log', '-1', '--parents', target_rev)
+	'git', "--git-dir=#{@topdir.to_s}/.git", "--work-tree=#{@topdir.to_s}", 'log', '--date=iso', '-1', '--parents', target_rev)
     log_out.force_encoding('locale').scrub!
     if !log_status.success?
       raise "git log failed."
@@ -163,7 +163,7 @@ class GITRepo
 
     children[target_rev].each {|child_rev|
       log_out, log_status = Open3.capture2({'LC_ALL'=>'C'},
-          'git', "--git-dir=#{@topdir.to_s}/.git", "--work-tree=#{@topdir.to_s}", 'log', '-1', child_rev)
+          'git', "--git-dir=#{@topdir.to_s}/.git", "--work-tree=#{@topdir.to_s}", 'log', '--date=iso', '-1', child_rev)
       log_out.force_encoding('locale').scrub!
       if !log_status.success?
         raise "git log failed."
