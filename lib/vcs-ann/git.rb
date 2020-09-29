@@ -20,7 +20,7 @@ class GITRepo
       else
         content_line = line.sub(/\A\t/, '')
         rev, original_file_line_number, final_file_line_number, numlines = block.shift.split(/\s+/)
-        if !block.empty?
+        if !header_hash[rev]
           header = {}
           block.each {|header_line|
             if / / =~ header_line.chomp
@@ -56,7 +56,7 @@ class GITRepo
     forward_author_name_width = 0
     git_blame_forward_each(@topdir.to_s, relpath, rev) {|rev, original_file_line_number, final_file_line_number, numlines, header, content_line|
       author_time = Time.at(header['author-time'].to_i).strftime("%Y-%m-%d")
-      author_name = header['author']
+      author_name = header['author'] || 'no author'
       content_line = content_line.chomp.expand_tab
       forward_author_name_width = author_name.length if forward_author_name_width < author_name.length
       forward_data << [rev, author_time, author_name, content_line, header['filename'], original_file_line_number]
